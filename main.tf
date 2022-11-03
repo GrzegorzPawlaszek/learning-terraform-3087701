@@ -50,7 +50,7 @@ module "blog_sg" {
   version = "4.16.0"
   name    = "blog_new"
   
-  vpc_id = module.vpc_dev.public_subnets[0]
+  vpc_id = module.vpc_dev.vpc_id
   
   # definicja reguł za pomocą predefiniowanych nazw: https://github.com/terraform-aws-modules/terraform-aws-security-group/blob/master/rules.tf
   # to w jaki sposób i co możemy definiować dla modułu jest opisane w sekcji Inputs na stronie registry.terraform.io dla tego modułu
