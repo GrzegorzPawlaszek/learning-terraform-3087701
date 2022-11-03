@@ -14,11 +14,6 @@ data "aws_ami" "app_ami" {
   owners = ["979382823631"] # Bitnami
 }
 
-# defaultowa vpc stworzona przez AWS'a
-data "aws_vpc" "default" {
-  default = true
-}
-
 resource "aws_instance" "blog" {
   ami           = data.aws_ami.app_ami.id
   # pobranie typu instancji z pliku variables.tf
