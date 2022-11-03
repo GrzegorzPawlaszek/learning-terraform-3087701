@@ -43,7 +43,7 @@ module "vpc_dev" {
     Terraform = "true"
     Environment = "dev"
   }
-}  
+}
 
 # security group zdefiniowana za pomocą predefiniowanego modułu pobranego z registry.terraform.io
 module "blog_sg" {
@@ -60,6 +60,46 @@ module "blog_sg" {
   
   egress_rules        = ["all-all"]
   egress_cidr_blocks = ["0.0.0.0/0"]
+}
+
+module "blog_alb" {
+  source  = "terraform-aws-modules/alb/aws"
+  version = "~> 8.0"
+
+  name = "blog-alb"
+
+  load_balancer_type = "application"
+
+  vpc_id             = module.vpc_dev.vpc_id
+  subnets            = module.vpc_dev.public_subnets
+  security_groups    = [module.blog_sg.security_group_id]
+
+  target_groups = [
+    {
+      name_prefix      = "blog-"
+      backend_protocol = "HTTP"
+      backend_port     = 80
+      target_type      = "instance"
+      targets = {
+        my_target = {
+          target_id = aws_instance.blog.id
+          port = 80
+        }
+      }
+    }
+  ]
+
+  http_tcp_listeners = [
+    {
+      port               = 80
+      protocol           = "HTTP"
+      target_group_index = 0
+    }
+  ]
+
+  tags = {
+    Environment = "dev"
+  }
 }
 
 
