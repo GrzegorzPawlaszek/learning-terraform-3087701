@@ -36,6 +36,7 @@ resource "aws_instance" "blog" {
 module "blog_sg" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "4.16.0"
+  name    = "blog_new"
   
   vpc_id = data.aws_vpc.default.id
   
