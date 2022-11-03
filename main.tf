@@ -31,6 +31,23 @@ resource "aws_instance" "blog" {
     Name = "HelloWorld"
   }
 }
+  
+module "vpc" {
+  source = "terraform-aws-modules/vpc/aws"
+
+  name = "my-vpc"
+  cidr = "10.0.0.0/16"
+
+  azs             = ["us-west-1a", "us-west-1b", "us-west-1c"]
+  public_subnets  = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
+
+  enable_nat_gateway = true
+
+  tags = {
+    Terraform = "true"
+    Environment = "dev"
+  }
+}  
 
 # security group zdefiniowana za pomocą predefiniowanego modułu pobranego z registry.terraform.io
 module "blog_sg" {
@@ -38,7 +55,7 @@ module "blog_sg" {
   version = "4.16.0"
   name    = "blog_new"
   
-  vpc_id = data.aws_vpc.default.id
+  vpc_id = module.vpc.public_subnets[0]
   
   # definicja reguł za pomocą predefiniowanych nazw: https://github.com/terraform-aws-modules/terraform-aws-security-group/blob/master/rules.tf
   # to w jaki sposób i co możemy definiować dla modułu jest opisane w sekcji Inputs na stronie registry.terraform.io dla tego modułu
