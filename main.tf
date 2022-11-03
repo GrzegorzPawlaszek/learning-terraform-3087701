@@ -35,7 +35,7 @@ resource "aws_instance" "blog" {
 module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
 
-  name = "my-vpc"
+  name = "dev"
   cidr = "10.0.0.0/16"
 
   azs             = ["us-west-1a", "us-west-1b", "us-west-1c"]
