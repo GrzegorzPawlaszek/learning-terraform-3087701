@@ -21,6 +21,7 @@ resource "aws_instance" "blog" {
   
   # podpięcie security_group z modułu. Output dla id securoty group'y jest podany w zakłądce Outputs na stronie registry.terraform.io dla tego modułu
   vpc_security_group_ids = [module.blog_sg.security_group_id]
+  subnet_id              = module.vpc_dev.public_subnets[0]
 
   tags = {
     Name = "HelloWorld"
