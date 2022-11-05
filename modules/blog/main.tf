@@ -31,7 +31,7 @@ resource "aws_instance" "blog" {
 module "blog_vpc" {
   source = "terraform-aws-modules/vpc/aws"
 
-  name = var.environment.dev
+  name = var.environment.name
   cidr = "${var.environment.network_prefix}.0.0/16"
 
   azs             = ["us-west-2a", "us-west-2b", "us-west-2c"]
@@ -41,7 +41,7 @@ module "blog_vpc" {
 
   tags = {
     Terraform = "true"
-    Environment = var.environment.dev
+    Environment = var.environment.name
   }
 }
 
